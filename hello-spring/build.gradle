@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+	compile('org.springframework.boot:spring-boot-devtools')	//템플릿 자동업데이트
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
