@@ -12,6 +12,7 @@ public class MemberServiceTest {
 
 //    MemberService memberService = new MemberServiceImpl();
     MemberService memberService;
+
     ApplicationContext ac;
 
     @BeforeEach
