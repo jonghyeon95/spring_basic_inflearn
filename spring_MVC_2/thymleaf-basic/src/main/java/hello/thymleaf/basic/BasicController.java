@@ -119,6 +119,10 @@ public class BasicController {
         return "basic/javascript";
     }
 
+
+
+
+
     private void addUsers(Model model) {
         List<User> list = new ArrayList<>();
 
@@ -128,9 +132,6 @@ public class BasicController {
 
         model.addAttribute("users", list);
     }
-
-
-
 
     @Component("helloBean")
     static class HelloBean {
