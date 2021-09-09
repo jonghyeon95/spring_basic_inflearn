@@ -156,6 +156,11 @@ public class ValidationItemControllerV2 {
         log.info("objectName={}", bindingResult.getObjectName());
         log.info("target={}", bindingResult.getTarget());
 
+        if(bindingResult.hasErrors()){
+            log.info("errors = {}", bindingResult);
+            return "validation/v2/addForm";
+        }
+
         //검증 로직
         if (!StringUtils.hasText(item.getItemName())) {
             bindingResult.rejectValue("itemName", "required");
@@ -166,6 +171,7 @@ public class ValidationItemControllerV2 {
         if (item.getQuantity() == null || item.getQuantity() >= 9999) {
             bindingResult.rejectValue("quantity", "max", new Object[]{9999}, null);
         }
+
         if (item.getQuantity() != null && item.getPrice() != null) {
             int resultPrice = item.getPrice() * item.getQuantity();
             if (resultPrice < 10000) {
