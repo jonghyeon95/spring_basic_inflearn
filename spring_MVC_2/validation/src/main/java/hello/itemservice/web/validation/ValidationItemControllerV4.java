@@ -79,7 +79,7 @@ public class ValidationItemControllerV4 {
     }
 
     @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, @Validated(UpdateCheck.class) @ModelAttribute("item") ItemUpdateForm form, BindingResult bindingResult) {
+    public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") ItemUpdateForm form, BindingResult bindingResult) {
 
         if (form.getQuantity() != null && form.getPrice() != null) {
             int resultPrice = form.getPrice() * form.getQuantity();
