@@ -74,8 +74,6 @@ public class HomeController {
     @GetMapping("/")
     public String homeLoginV3Spring(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember , Model model){
 
-        log.info("로그인정보:{}",loginMember);
-
         if(loginMember == null)
             return "home";
 
