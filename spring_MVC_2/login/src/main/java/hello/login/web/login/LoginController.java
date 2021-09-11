@@ -51,7 +51,7 @@ public class LoginController {
     public String logout(HttpServletResponse response) {
         expireCookie(response, "memberId");
 
-        return "redirct:/";
+        return "redirect:/";
     }
 
     private void expireCookie(HttpServletResponse response, String cookieName) {
