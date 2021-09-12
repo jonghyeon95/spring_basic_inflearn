@@ -1,5 +1,7 @@
 package hello.typeconverter.type;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
