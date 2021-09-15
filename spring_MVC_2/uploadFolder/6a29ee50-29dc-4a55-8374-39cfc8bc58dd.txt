@@ -1,0 +1,40 @@
+alt + insert => getter setter 자동생성
+
+alt + enter=> 자동완성
+
+ctrl + shift + Backspace => 뒤로가기
+ctrl + shift + \ => 앞으로가기
+
+shift + enter => 커서만 다음줄로 이동
+ctrl + shift + enter => 현재줄을 마무리지고 다음줄로 이동
+
+ctrl + shift + 마우스좌클릭 => 정의한곳으로 이동
+
+shift + F6 => 변수명 리네임
+
+ctrl + alt + m => 따로 메서드로 뽑기
+
+클래스 선택커서 후 ctrl + shift + t => 테스트케이스 자동생성
+
+shift + F10 => 방금 실행한곳 다시 실행
+
+ctrl + N => 클래스검색
+
+ctrl + P => 필요한 인자값 알려줌
+
+ctrl + alt + v => 변수 자동생성
+
+F2 => 오류난곳으로 이동
+
+ctrl + alt + L => 자동 정렬
+
+ctrl + E => 히스토리 확인
+
+ctrl + shipt + B => 상속하고있는 객체 확인
+
+ctrl + alt + N => Inline (코드 합치기)
+
+ctrl + w => 드래그
+
+crtl + r => 단어 교체
+crtl + shift + r => 폴더안에서 교체
