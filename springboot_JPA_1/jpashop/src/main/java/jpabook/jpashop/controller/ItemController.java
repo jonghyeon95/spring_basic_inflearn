@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,5 +43,36 @@ public class ItemController {
         List<Item> items = itemService.findItems();
         model.addAttribute("items", items);
         return "items/itemList";
+    }
+
+    @GetMapping("/items/{itemId}/edit")
+    public String updateForm(@PathVariable Long itemId, Model model){
+        Book item = (Book) itemService.findOne(itemId);
+
+        BookForm bookForm = new BookForm();
+        bookForm.setId(item.getId());
+        bookForm.setPrice(item.getPrice());
+        bookForm.setAuthor(item.getAuthor());
+        bookForm.setName(item.getName());
+        bookForm.setIsbn(item.getIsbn());
+        bookForm.setStockQuantity(item.getStockQuantity());
+
+        model.addAttribute("form", bookForm);
+
+        return "items/updateItemForm";
+    }
+
+    @PostMapping("/items/{itemId}/edit")
+    public String update(@ModelAttribute BookForm form, Model model) {
+        Book book = new Book();
+        book.setId(form.getId());
+        book.setName(form.getName());
+        book.setAuthor(form.getAuthor());
+        book.setIsbn(form.getIsbn());
+        book.setPrice(form.getPrice());
+        book.setStockQuantity(form.getStockQuantity());
+
+        itemService.saveItem(book);
+        return "redirect:/items";
     }
 }
