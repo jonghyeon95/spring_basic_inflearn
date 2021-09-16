@@ -13,7 +13,13 @@ spring:
         show_sql: true
         format_sql: true
 
+  messages:
+    basename: errors
+
+
 loggin:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+#spring.messages.basename=messages, errors
