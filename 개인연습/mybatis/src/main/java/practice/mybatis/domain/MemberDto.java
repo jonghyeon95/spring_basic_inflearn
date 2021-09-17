@@ -1,27 +1,25 @@
-package practice.mybatis.dto;
+package practice.mybatis.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MemberDto {
 
-    private int seq;
+    private Integer id;
     private String name;
-    private int age;
+    private Integer age;
     private String email;
-
-    public MemberDto(int seq, String name, int age, String email) {
-        this.seq = seq;
-        this.name = name;
-        this.age = age;
-        this.email = email;
-    }
 
     @Override
     public String toString() {
         return "MemberDto{" +
-                "seq=" + seq +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 ", email='" + email + '\'' +

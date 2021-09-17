@@ -1,11 +1,14 @@
 package practice.mybatis.service;
 
-import practice.mybatis.dto.MemberDto;
+import practice.mybatis.domain.MemberDto;
 
 import java.util.List;
 
 public interface MemberService {
 
-    public List<MemberDto> getUserList();
+    List<MemberDto> getMemberList();
 
+    Integer addMember(MemberDto memberDto);
+
+    Integer updateMember();
 }
