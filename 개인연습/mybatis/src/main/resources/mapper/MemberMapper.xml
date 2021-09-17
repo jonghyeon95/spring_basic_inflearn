@@ -6,7 +6,46 @@
         SELECT * FROM member
     </select>
 
-    <insert id="addMember" >
+    <select id="getMemberById" resultType="MemberDto">
+        SELECT * FROM member WHERE id = #{id}
+    </select>
+
+    <select id="search" resultType="MemberDto">
+        SELECT * FROM member WHERE 1=1
+        <if test="id!=null">
+            AND id = #{id}
+        </if>
+        <if test="name!=null and name!=''">
+            AND name Like '%${name}%'
+        </if>
+        <if test="age!=null">
+            AND age = #{age}
+        </if>
+        <if test="email!=null and email!=''">
+            AND email Like '%${email}%'
+        </if>
+    </select>
+
+
+    <insert id="addMember" useGeneratedKeys="true" keyProperty="id" >
             INSERT INTO member (name,age,email) VALUES (#{name},#{age},#{email})
     </insert>
+    
+    <insert id="addMembers" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO member (name, age, email) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name}, #{item.age}, #{item.email})
+        </foreach>
+    </insert>
+
+    <update id="updateMember" useGeneratedKeys="true" keyProperty="id">
+        UPDATE member
+        SET name = #{name}, age = #{age}, email = #{email}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteMember">
+        DELETE FROM member WHERE id = #{id}
+    </delete>
+
 </mapper>

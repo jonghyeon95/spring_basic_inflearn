@@ -10,8 +10,13 @@ public interface MemberMapper {
 
     List<MemberDto> getMemberList();
 
-    Long addMember(MemberDto memberDto); //Insert 실행 갯수 리턴
+    MemberDto getMemberById(Integer id);
 
+    List<MemberDto> search(MemberDto memberDto);
 
-    Integer updateMember();
+    Long addMember(MemberDto memberDto);
+
+    Long addMembers(List<MemberDto> memberDtoList);
+
+    Integer updateMember(MemberDto memberDto);
 }

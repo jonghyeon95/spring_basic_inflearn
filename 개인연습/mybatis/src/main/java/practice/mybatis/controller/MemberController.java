@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import practice.mybatis.domain.MemberDto;
-import practice.mybatis.service.MemberService;
 import practice.mybatis.service.MemberServiceImpl;
 
 import java.util.List;

@@ -19,12 +19,25 @@ public class MemberServiceImpl{
         return memberMapper.getMemberList();
     }
 
+    public MemberDto getMemberById(Integer id){
+        return memberMapper.getMemberById(id);
+    }
+
+    public List<MemberDto> search(MemberDto memberDto){
+        return memberMapper.search(memberDto);
+    }
+
+
     public Long addMember(MemberDto memberDto) {
         return memberMapper.addMember(memberDto); //이거가 안돼
     }
 
-    public Integer updateMember() {
-        return memberMapper.updateMember();
+    public Long addMembers(List<MemberDto> memberDtoList) {
+        return memberMapper.addMembers(memberDtoList);
+    }
+
+    public Integer updateMember(MemberDto memberDto) {
+        return memberMapper.updateMember(memberDto);
     }
 
 }
