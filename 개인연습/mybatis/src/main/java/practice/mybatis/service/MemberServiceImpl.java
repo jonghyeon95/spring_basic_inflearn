@@ -3,6 +3,7 @@ package practice.mybatis.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practice.mybatis.domain.MemberDto;
 import practice.mybatis.mapper.MemberMapper;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class MemberServiceImpl{
 
     private final MemberMapper memberMapper;

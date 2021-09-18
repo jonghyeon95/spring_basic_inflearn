@@ -5,6 +5,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import practice.mybatis.domain.MemberDto;
 
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Slf4j
+@Transactional
+@Rollback(value = true)
 class TestServiceImplTest {
 
     @Autowired
@@ -46,6 +50,7 @@ class TestServiceImplTest {
     }
 
     @Test
+
     void addMember() {
         MemberDto memberDto = new MemberDto();
         memberDto.setAge(28);
@@ -58,6 +63,7 @@ class TestServiceImplTest {
     }
 
     @Test
+    @Rollback
     void addMembers() {
         MemberDto memberDto1 = new MemberDto();
         memberDto1.setAge(29);
