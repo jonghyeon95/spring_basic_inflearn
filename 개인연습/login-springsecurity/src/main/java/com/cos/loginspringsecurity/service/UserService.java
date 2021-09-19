@@ -4,6 +4,7 @@ import com.cos.loginspringsecurity.domain.User;
 import com.cos.loginspringsecurity.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ public class UserService {
     }
 
     public int add(User user){
+        String rawPassword = user.getPassword();
+        user.setPassword(new BCryptPasswordEncoder().encode(rawPassword));
         return userMapper.add(user);
     }
 
