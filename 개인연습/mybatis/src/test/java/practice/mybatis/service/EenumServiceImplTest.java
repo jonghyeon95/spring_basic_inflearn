@@ -8,8 +8,11 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mybatis.domain.Eenum;
 import practice.mybatis.domain.EenumDto;
+import practice.mybatis.domain.MemberDto;
 
-import java.util.List;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,6 +30,7 @@ class EenumServiceImplTest {
 
         EenumDto eenumDto = new EenumDto();
         eenumDto.setEenum(Eenum.AAA);
+        eenumDto.setMemberId(16);
 
         final int i = eenumService.AddEenum(eenumDto);
         log.info("결과 : {}", i);
@@ -40,4 +44,26 @@ class EenumServiceImplTest {
             log.info("eenum : {}", eenum.getEenum());
         }
     }
+
+    @Test
+    void selectJoin(){
+        List<Map> maps = eenumService.selectJoin();
+        List<MemberDto> members = new ArrayList<>();
+        for (Map map : maps) {
+            log.info("map : {}",map);
+            log.info("name:{}" ,map.get("name"));
+            members.add(MemberDtoMapping(map));
+        }
+
+        for (MemberDto member : members) {
+            log.info("memberDto : {}",member.toString());
+        }
+    }
+
+    MemberDto MemberDtoMapping(Map map){
+        MemberDto memberDto = new MemberDto((Integer) map.get("memberId"), (String)map.get("name"), (Integer) map.get("age"), (String)map.get("email"));
+//        log.info("memberDto : {}",memberDto.toString());
+        return memberDto;
+    }
+
 }

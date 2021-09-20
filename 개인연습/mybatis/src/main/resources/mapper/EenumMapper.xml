@@ -8,8 +8,11 @@
 
 
     <insert id="addEenum" >
-            INSERT INTO EnumTable (eenum) VALUES (#{eenum})
+            INSERT INTO EnumTable (eenum, memberid) VALUES (#{eenum}, #{memberId})
     </insert>
-    
+
+    <select id="selectJoin" resultType="map">
+        SELECT * FROM EnumTable e JOIN member m ON m.id = e.memberid;
+    </select>
 
 </mapper>

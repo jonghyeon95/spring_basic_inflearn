@@ -5,6 +5,7 @@ import practice.mybatis.domain.Eenum;
 import practice.mybatis.domain.EenumDto;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface EenumMapper {
@@ -13,4 +14,5 @@ public interface EenumMapper {
 
     int addEenum(EenumDto eenum);
 
+    List<Map> selectJoin();
 }

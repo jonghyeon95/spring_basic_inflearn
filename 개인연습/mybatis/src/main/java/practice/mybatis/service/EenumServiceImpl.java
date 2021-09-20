@@ -8,6 +8,7 @@ import practice.mybatis.domain.EenumDto;
 import practice.mybatis.mapper.EenumMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -22,5 +23,9 @@ public class EenumServiceImpl {
 
     List<EenumDto> selectEenum(){
         return eenumMapper.getEenumList();
+    }
+
+    List<Map> selectJoin(){
+        return eenumMapper.selectJoin();
     }
 }
