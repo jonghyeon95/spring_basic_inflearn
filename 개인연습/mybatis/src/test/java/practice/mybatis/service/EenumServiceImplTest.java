@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import practice.mybatis.domain.Eenum;
 import practice.mybatis.domain.EenumDto;
 import practice.mybatis.domain.MemberDto;
+import practice.mybatis.mapper.EenumMapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -58,6 +59,19 @@ class EenumServiceImplTest {
         for (MemberDto member : members) {
             log.info("memberDto : {}",member.toString());
         }
+    }
+
+    @Test
+    void SearchJoin(){
+        MemberDto memberDto = new MemberDto();
+        EenumDto eenumDto = new EenumDto();
+        memberDto.setName("김");
+        final List<Map> findMembers = eenumService.search(eenumDto, memberDto);
+
+        for (Map findMember : findMembers) {
+            log.info("findMember = {}", findMember);
+        }
+
     }
 
     MemberDto MemberDtoMapping(Map map){

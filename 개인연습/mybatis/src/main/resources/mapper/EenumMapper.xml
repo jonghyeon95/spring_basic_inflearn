@@ -15,4 +15,20 @@
         SELECT * FROM EnumTable e JOIN member m ON m.id = e.memberid;
     </select>
 
+    <select id="search" resultType="map" parameterType="map">
+        SELECT * FROM member WHERE 1=1
+        <if test="member.id!=null">
+            AND id = #{member.id}
+        </if>
+        <if test="member.name!=null and member.name!=''">
+            AND name Like '%${member.name}%'
+        </if>
+        <if test="member.age!=null">
+            AND age = #{member.age}
+        </if>
+        <if test="member.email!=null and member.email!=''">
+            AND email Like '%${member.email}%'
+        </if>
+    </select>
+
 </mapper>
