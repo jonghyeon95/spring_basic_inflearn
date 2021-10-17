@@ -20,5 +20,4 @@ public class ItemSaveForm {
     @Max(value = 9999)
     private Integer quantity;
 
-
 }
