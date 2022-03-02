@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -29,17 +28,34 @@ public class Member extends BaseEntity{
     private Team team;
 
     @Embedded   //임베디드 타입
-    private Address address;
+    private Address homeAddress;
 
-    @Embedded
-    private Period period;
+    @Builder.Default
+    @ElementCollection
+    @CollectionTable(name = "favorite_food", joinColumns = @JoinColumn(name = "member_id"))
+    @Column(name = "food_name")
+    private Set<String> favoriteFoods = new HashSet<>();
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "start_date", column = @Column(name = "start_date2")),
-            @AttributeOverride(name = "end_date", column = @Column(name = "end_date2"))
-    })
-    private Period period2;
+//    @Builder.Default
+//    @ElementCollection
+//    @CollectionTable(name = "address", joinColumns = @JoinColumn(name = "member_id"))
+//    private List<Address> addressHistory = new ArrayList<>();
+
+//    @Builder.Default
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "member_id") //일대다 단방향. 관계의 연관관계주인을 1 로 설정
+    private List<AddressEntity> addressHistory = new ArrayList<>();
+
+
+//    @Embedded
+//    private Period period;
+//
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name = "start_date", column = @Column(name = "start_date2")),
+//            @AttributeOverride(name = "end_date", column = @Column(name = "end_date2"))
+//    })
+//    private Period period2;
 
     @Builder.Default
     @OneToMany(mappedBy = "member")
