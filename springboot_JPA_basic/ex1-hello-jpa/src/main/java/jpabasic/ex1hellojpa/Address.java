@@ -1,16 +1,14 @@
 package jpabasic.ex1hellojpa;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Data
+//@Data
+@Getter //임베디드 타입은 Setter를 없애서 불변하게 만듬
 @Builder @NoArgsConstructor @AllArgsConstructor
 @Embeddable
 public class Address{
