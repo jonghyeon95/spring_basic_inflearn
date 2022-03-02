@@ -12,9 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder @NoArgsConstructor @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 public class Item {

@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
+import static javax.persistence.FetchType.LAZY;
+
 @Data
-@SuperBuilder @NoArgsConstructor @AllArgsConstructor
-@DiscriminatorValue("A")
-public class Album extends Item {
+@Builder @NoArgsConstructor @AllArgsConstructor
+@Embeddable
+public class Address{
 
-    private String artist;
-
+    private String city;
+    private String street;
+    private String zipcode;
 }

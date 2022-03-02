@@ -7,15 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Data
 @SuperBuilder @NoArgsConstructor @AllArgsConstructor
-@DiscriminatorValue("A")
-public class Album extends Item {
+@MappedSuperclass
+public abstract class BaseEntity {
 
-    private String artist;
+    private String create_by;
+    private LocalDateTime create_date;
+    private String last_modified_by;
+    private LocalDateTime last_modified_date;
 
 }
