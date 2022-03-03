@@ -21,22 +21,32 @@ public class Ex1HelloJpqlApplication {
 
 		try {
 
-			for (int i = 0; i < 100; i++) {
-				Member member = Member.builder().username("member1").age(i).build();
-				em.persist(member);
-			}
+			Team team = Team.builder().name("teamA").build();
+			em.persist(team);
 
+			Member member = Member.builder().username("member1").age(10).type(MemberType.ADMIN).build();
+			member.changeTeam(team);
+			em.persist(member);
+
+			Member member1 = Member.builder().age(10).type(MemberType.ADMIN).build();
+			member.changeTeam(team);
+			em.persist(member1);
 
 			em.flush();
 			em.clear();
 
-			List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
-					.setFirstResult(2)	//인덱스번호
-					.setMaxResults(5)	//출력갯수
-					.getResultList();
+			List<String> resultList = em.createQuery("select coalesce(m.username, '이름없는 회원') from Member m"
+					, String.class).getResultList();
 
-			for (Member member1 : resultList) {
-				System.out.println("member1 = " + member1);
+			for (String s : resultList) {
+				System.out.println("s = " + s);
+			}
+
+			List<String> resultList2 = em.createQuery("select nullif(m.username, 'member1') from Member m"
+					, String.class).getResultList();
+
+			for (String s : resultList2) {
+				System.out.println("s = " + s);
 			}
 
 			tx.commit();
