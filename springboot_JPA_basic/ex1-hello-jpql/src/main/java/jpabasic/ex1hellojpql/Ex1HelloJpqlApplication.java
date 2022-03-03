@@ -45,22 +45,13 @@ public class Ex1HelloJpqlApplication {
 
 			System.out.println(" ============================= ");
 
-//			List<Member> resultList = em.createQuery("select m from Member m join fetch m.team"
-//					, Member.class).getResultList();
-//
-//			for (Member member : resultList) {
-//				System.out.println("member = " + member);
-//				System.out.println("team = " + member.getTeam());
-//			}
-
-			List<Team> resultList = em.createQuery("select t from Team t", Team.class)
-					.setFirstResult(0)
-					.setMaxResults(2)
+			List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+					.setParameter("username", "member1")
 					.getResultList();
-			for (Team team : resultList) {
-				System.out.println("team = " + team);
-				System.out.println("team.getMembers().size() = " + team.getMembers().size());
+			for (Member member : resultList) {
+				System.out.println("member = " + member);
 			}
+
 
 			tx.commit();
 		} catch (Exception e) {
