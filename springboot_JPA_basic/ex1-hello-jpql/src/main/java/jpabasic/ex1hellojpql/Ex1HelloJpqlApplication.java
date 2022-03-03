@@ -21,18 +21,23 @@ public class Ex1HelloJpqlApplication {
 
 		try {
 
-			Member member = Member.builder().username("member1").age(1).build();
-			em.persist(member);
+			for (int i = 0; i < 100; i++) {
+				Member member = Member.builder().username("member1").age(i).build();
+				em.persist(member);
+			}
+
 
 			em.flush();
 			em.clear();
 
-//			List<Object[]> resultList = em.createQuery("select m.age, m.username from Member m").getResultList();
-//			System.out.println("result = " + resultList.get(0)[0] + ", " + resultList.get(0)[1]);
+			List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
+					.setFirstResult(2)	//인덱스번호
+					.setMaxResults(5)	//출력갯수
+					.getResultList();
 
-			List<MemberDto> resultList1 = em.createQuery("select new jpabasic.ex1hellojpql.MemberDto(m.username, m.age) from Member m", MemberDto.class).getResultList();
-			System.out.println("resultList1 = " + resultList1);
-
+			for (Member member1 : resultList) {
+				System.out.println("member1 = " + member1);
+			}
 
 			tx.commit();
 		} catch (Exception e) {
