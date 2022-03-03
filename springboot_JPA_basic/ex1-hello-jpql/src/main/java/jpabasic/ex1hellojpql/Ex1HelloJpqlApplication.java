@@ -22,31 +22,44 @@ public class Ex1HelloJpqlApplication {
 
 		try {
 
-			Team team = Team.builder().name("teamA").build();
-			em.persist(team);
+			Team teamA = Team.builder().name("teamA").build();
+			em.persist(teamA);
 
-			Member member = Member.builder().username("member1").age(10).type(MemberType.ADMIN).build();
-			member.changeTeam(team);
-			em.persist(member);
+			Team teamB = Team.builder().name("teamB").build();
+			em.persist(teamB);
 
-			Member member1 = Member.builder().age(10).type(MemberType.ADMIN).build();
-			member.changeTeam(team);
+			Member member1 = Member.builder().username("member1").age(10).type(MemberType.ADMIN).build();
+			member1.changeTeam(teamA);
 			em.persist(member1);
+
+			Member member2 = Member.builder().username("member2").age(11).type(MemberType.ADMIN).build();
+			member2.changeTeam(teamA);
+			em.persist(member2);
+
+			Member member3 = Member.builder().username("member3").age(12).type(MemberType.ADMIN).build();
+			member3.changeTeam(teamB);
+			em.persist(member3);
 
 			em.flush();
 			em.clear();
 
-			List<String> resultList = em.createQuery("select m.username from Member m"	//상태필드 (더이상 탐색X)
-					, String.class).getResultList();
+			System.out.println(" ============================= ");
 
-			em.createQuery("select m.team from Member m", Team.class);	//단일 값 연관 경로, 묵시적 내부 조인 발생 (뒤에서 조인이 일어남). 탐색이 가능 m.team.aaa
+//			List<Member> resultList = em.createQuery("select m from Member m join fetch m.team"
+//					, Member.class).getResultList();
+//
+//			for (Member member : resultList) {
+//				System.out.println("member = " + member);
+//				System.out.println("team = " + member.getTeam());
+//			}
 
-			em.createQuery("select t.members from Team t", Collections.class);	//컬렉션 값 연관 경로, 묵시적 내부 조인 발생. 탐색X tm.members.안됨
-
-			em.createQuery("select m from Team t join Member m", Member.class);	//컬렉션 값 연관 경로, 명시적 조인을 통해 탐색 가능
-
-			for (String s : resultList) {
-				System.out.println("s = " + s);
+			List<Team> resultList = em.createQuery("select t from Team t", Team.class)
+					.setFirstResult(0)
+					.setMaxResults(2)
+					.getResultList();
+			for (Team team : resultList) {
+				System.out.println("team = " + team);
+				System.out.println("team.getMembers().size() = " + team.getMembers().size());
 			}
 
 			tx.commit();
