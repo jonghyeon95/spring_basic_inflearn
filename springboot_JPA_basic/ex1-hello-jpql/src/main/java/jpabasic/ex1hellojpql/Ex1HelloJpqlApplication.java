@@ -28,15 +28,15 @@ public class Ex1HelloJpqlApplication {
 			Team teamB = Team.builder().name("teamB").build();
 			em.persist(teamB);
 
-			Member member1 = Member.builder().username("member1").age(10).type(MemberType.ADMIN).build();
+			Member member1 = Member.builder().username("member1").age(15).type(MemberType.ADMIN).build();
 			member1.changeTeam(teamA);
 			em.persist(member1);
 
-			Member member2 = Member.builder().username("member2").age(11).type(MemberType.ADMIN).build();
+			Member member2 = Member.builder().username("member2").age(20).type(MemberType.ADMIN).build();
 			member2.changeTeam(teamA);
 			em.persist(member2);
 
-			Member member3 = Member.builder().username("member3").age(12).type(MemberType.ADMIN).build();
+			Member member3 = Member.builder().username("member3").age(25).type(MemberType.ADMIN).build();
 			member3.changeTeam(teamB);
 			em.persist(member3);
 
@@ -45,10 +45,13 @@ public class Ex1HelloJpqlApplication {
 
 			System.out.println(" ============================= ");
 
-			List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
-					.setParameter("username", "member1")
-					.getResultList();
-			for (Member member : resultList) {
+			int result = em.createQuery("update Member m set m.age = 21 where m.age < 23").executeUpdate();
+			System.out.println("result = " + result);
+
+			em.clear();
+
+			List<Member> findMemberList = em.createQuery("select m from Member m", Member.class).getResultList();
+			for (Member member : findMemberList) {
 				System.out.println("member = " + member);
 			}
 
