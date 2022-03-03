@@ -42,9 +42,9 @@ public class Member extends BaseEntity{
 //    private List<Address> addressHistory = new ArrayList<>();
 
 //    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "member_id") //일대다 단방향. 관계의 연관관계주인을 1 로 설정
-    private List<AddressEntity> addressHistory = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "member_id") //일대다 단방향. 관계의 연관관계주인을 1 로 설정
+//    private List<AddressEntity> addressHistory = new ArrayList<>();
 
 
 //    @Embedded

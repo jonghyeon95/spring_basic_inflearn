@@ -8,6 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,36 +28,28 @@ public class Ex1HelloJpaApplication {
 
         try {
 
-            Member member = Member.builder().username("member1").homeAddress(Address.builder().city("homeCity").zipcode("1000").street("strret").build())
-                    .build();
+            //일반 jpql
+            List<Member> resultList = em.createQuery("select m from Member m where m.username like '%kim%'", Member.class).getResultList();
 
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");
+            //NativeQuery
+            List<Member> resultList2 = em.createNativeQuery("select * from member", Member.class).getResultList();
 
-//            member.getAddressHistory().add(AddressEntity.builder().address(Address.builder().city("old1").zipcode("1000").street("stret").build()).build());
-//            member.getAddressHistory().add(AddressEntity.builder().address(Address.builder().city("old2").zipcode("1000").street("street").build()).build());
+            //동적쿼리 위한 criteria
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Member> query = cb.createQuery(Member.class);
 
-            em.persist(member);
+            Root<Member> m = query.from(Member.class);
 
-            em.flush();
-            em.clear();
+            CriteriaQuery<Member> cq = query.select(m);
 
-            System.out.println("===================");
+            String username = "aa";
+            if (username != null) {
+                cq = cq.where(cb.equal(m.get("username"), "kim"));
+            }
+            List<Member> resultList3 = em.createQuery(cq).getResultList();
 
-            Member findMember = em.find(Member.class, member.getId());
-            findMember.getUsername();
+            //동적쿼리 위한 QueryDSL
 
-//            //member의 주소변경
-//            findMember.setHomeAddress(Address.builder().city("newCity").zipcode("1000").street("strret").build());
-//
-//            //치킨 -> 한식으로 변경
-//            findMember.getFavoriteFoods().remove("치킨");
-//            findMember.getFavoriteFoods().remove("한식");
-
-//            //주소히스토리 변경
-//            findMember.getAddressHistory().remove(Address.builder().city("old1").zipcode("1000").street("strret").build());
-//            findMember.getAddressHistory().add(Address.builder().city("newCity1").zipcode("1000").street("strret").build());
 
             tx.commit();
         } catch (Exception e) {
