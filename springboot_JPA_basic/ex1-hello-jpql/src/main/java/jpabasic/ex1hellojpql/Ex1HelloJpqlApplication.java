@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -35,17 +36,16 @@ public class Ex1HelloJpqlApplication {
 			em.flush();
 			em.clear();
 
-			List<String> resultList = em.createQuery("select coalesce(m.username, '이름없는 회원') from Member m"
+			List<String> resultList = em.createQuery("select m.username from Member m"	//상태필드 (더이상 탐색X)
 					, String.class).getResultList();
+
+			em.createQuery("select m.team from Member m", Team.class);	//단일 값 연관 경로, 묵시적 내부 조인 발생 (뒤에서 조인이 일어남). 탐색이 가능 m.team.aaa
+
+			em.createQuery("select t.members from Team t", Collections.class);	//컬렉션 값 연관 경로, 묵시적 내부 조인 발생. 탐색X tm.members.안됨
+
+			em.createQuery("select m from Team t join Member m", Member.class);	//컬렉션 값 연관 경로, 명시적 조인을 통해 탐색 가능
 
 			for (String s : resultList) {
-				System.out.println("s = " + s);
-			}
-
-			List<String> resultList2 = em.createQuery("select nullif(m.username, 'member1') from Member m"
-					, String.class).getResultList();
-
-			for (String s : resultList2) {
 				System.out.println("s = " + s);
 			}
 
