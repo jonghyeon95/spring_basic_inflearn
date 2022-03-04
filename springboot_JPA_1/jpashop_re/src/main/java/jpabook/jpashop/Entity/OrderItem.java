@@ -3,11 +3,13 @@ package jpabook.jpashop.Entity;
 import jpabook.jpashop.Entity.Item.Item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Builder @NoArgsConstructor @AllArgsConstructor
+@Data
 @Entity
 public class OrderItem {
 

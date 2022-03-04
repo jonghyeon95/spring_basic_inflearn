@@ -1,11 +1,15 @@
 package jpabook.jpashop.Entity.Item;
 
+import jpabook.jpashop.Entity.Category;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -25,4 +29,8 @@ public abstract class Item {
     private int price;
 
     private int stockQuantity;
+
+    @Builder.Default
+    @ManyToMany(mappedBy = "items")
+    private List<Category> categories = new ArrayList<>();
 }
