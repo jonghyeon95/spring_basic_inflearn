@@ -1,6 +1,6 @@
-package jpabook.jpashop.Entity;
+package jpabook.jpashop.Domain;
 
-import jpabook.jpashop.Entity.Enum.DeliveryStatus;
+import jpabook.jpashop.Domain.Enum.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package jpabook.jpashop.Entity;
+package jpabook.jpashop.Domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +19,7 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     @Embedded

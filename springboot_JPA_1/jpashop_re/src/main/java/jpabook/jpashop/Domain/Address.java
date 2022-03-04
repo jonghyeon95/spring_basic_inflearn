@@ -1,4 +1,4 @@
-package jpabook.jpashop.Entity;
+package jpabook.jpashop.Domain;
 
 
 import lombok.AllArgsConstructor;

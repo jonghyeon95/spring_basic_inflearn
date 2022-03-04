@@ -1,4 +1,4 @@
-package jpabook.jpashop.Entity.Enum;
+package jpabook.jpashop.Domain.Enum;
 
 public enum DeliveryStatus {
     READY, COMP

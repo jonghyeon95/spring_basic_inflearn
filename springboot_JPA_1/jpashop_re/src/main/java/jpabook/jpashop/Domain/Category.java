@@ -1,6 +1,6 @@
-package jpabook.jpashop.Entity;
+package jpabook.jpashop.Domain;
 
-import jpabook.jpashop.Entity.Item.Item;
+import jpabook.jpashop.Domain.Item.Item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
