@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 
-@Builder @NoArgsConstructor @AllArgsConstructor
+@SuperBuilder @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Data
 @DiscriminatorValue("B")

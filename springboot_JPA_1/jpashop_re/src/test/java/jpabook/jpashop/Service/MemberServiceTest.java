@@ -1,5 +1,7 @@
 package jpabook.jpashop.Service;
 
+import jpabook.jpashop.Domain.Item.Book;
+import jpabook.jpashop.Domain.Item.Item;
 import jpabook.jpashop.Domain.Member;
 import jpabook.jpashop.Repository.MemberRepository;
 import org.junit.jupiter.api.Assertions;

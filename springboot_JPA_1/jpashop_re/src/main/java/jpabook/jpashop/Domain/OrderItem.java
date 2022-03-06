@@ -1,14 +1,11 @@
 package jpabook.jpashop.Domain;
 
 import jpabook.jpashop.Domain.Item.Item;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Builder @NoArgsConstructor @AllArgsConstructor
+@Builder @NoArgsConstructor(access = AccessLevel.PROTECTED) @AllArgsConstructor
 @Data
 @Entity
 public class OrderItem {
@@ -29,5 +26,24 @@ public class OrderItem {
     private int orderPrice;
 
     private int count;
+
+    //==생성메서드==//
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = OrderItem.builder().item(item).orderPrice(orderPrice).count(count).build();
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+
+    //==비지니스 로직==//
+    public void cancelOrderItem() {
+        getItem().addStock(count);
+    }
+
+    //==조회 로직==//
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
 }
 

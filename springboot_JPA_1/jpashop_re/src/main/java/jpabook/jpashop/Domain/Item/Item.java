@@ -12,9 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder @NoArgsConstructor @AllArgsConstructor
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
