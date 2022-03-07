@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -51,6 +53,12 @@ class MemberServiceTest {
         Assertions.assertThrows(IllegalStateException.class, () -> {
             memberService.join(member2);
         });
+    }
+    
+    @Test
+    public void 전체회원() throws Exception {
+        List<Member> members = memberService.findMembers();
+        System.out.println("members.size() = " + members.size());
     }
 
 }

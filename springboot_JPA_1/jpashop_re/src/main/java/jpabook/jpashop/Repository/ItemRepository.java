@@ -13,11 +13,13 @@ public class ItemRepository {
 
     private final EntityManager em;
 
-    public void save(Item item) {
+    public Item save(Item item) {
         if (item.getId() == null) {
             em.persist(item);
+            return item;
         } else {
-            em.merge(item); //update 비슷
+            Item merge = em.merge(item);    //병합
+            return merge;
         }
     }
 
