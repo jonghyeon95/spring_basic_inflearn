@@ -27,7 +27,7 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    //나중에없어짐
+    //동적쿼리 일단 적기
     public List<Order> findAllBySearch(OrderSearch orderSearch) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
