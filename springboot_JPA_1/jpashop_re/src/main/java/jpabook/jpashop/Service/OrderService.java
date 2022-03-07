@@ -6,12 +6,15 @@ import jpabook.jpashop.Domain.Item.Item;
 import jpabook.jpashop.Domain.Member;
 import jpabook.jpashop.Domain.Order;
 import jpabook.jpashop.Domain.OrderItem;
+import jpabook.jpashop.Dto.OrderSearch;
 import jpabook.jpashop.Repository.ItemRepository;
 import jpabook.jpashop.Repository.MemberRepository;
 import jpabook.jpashop.Repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +44,12 @@ public class OrderService {
 
         Order order = orderRepository.findByPk(orderId);
         order.cancelOrder();
+    }
+
+    public List<Order> findOrders(OrderSearch orderSearch) {
+
+        List<Order> orders = orderRepository.findAllBySearch(orderSearch);
+        return orders;
     }
 
 }
