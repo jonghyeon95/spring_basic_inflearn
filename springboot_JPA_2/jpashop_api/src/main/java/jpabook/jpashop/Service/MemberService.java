@@ -39,5 +39,9 @@ public class MemberService {
         return memberRepository.findByPk(member_id);
     }
 
-
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findByPk(id);
+        member.setName(name);
+    }
 }

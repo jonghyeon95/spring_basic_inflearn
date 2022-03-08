@@ -5,9 +5,7 @@ import jpabook.jpashop.Service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -17,6 +15,8 @@ import javax.validation.constraints.NotEmpty;
 public class MemberApiController {
 
     private final MemberService memberService;
+
+    //===========회원가입==============//
 
     @PostMapping("/api/v1/members")
     public CreateMemberResponse saveMemberV1(@RequestBody @Valid Member member) {
@@ -46,5 +46,28 @@ public class MemberApiController {
             this.id = id;
         }
     }
+
+    //===========회원수정==============//
+
+    @PutMapping("/api/v2/members/{id}")
+    public UpdateMemberResponse updateMemberV2(@RequestBody @Valid UpdateMemberRequest request, @PathVariable Long id) {
+        memberService.update(id, request.getName());
+        Member findMember = memberService.findByPk(id);
+        return new UpdateMemberResponse(findMember.getId(), findMember.getName());
+    }
+
+    @Data
+    static class UpdateMemberRequest {
+        @NotEmpty
+        private String name;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class UpdateMemberResponse {
+        private Long id;
+        private String name;
+    }
+
 
 }
