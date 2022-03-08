@@ -1,18 +1,15 @@
 package jpabook.jpashop.api;
 
-import jpabook.jpashop.Domain.Address;
-import jpabook.jpashop.Domain.Enum.OrderStatus;
 import jpabook.jpashop.Domain.Order;
 import jpabook.jpashop.Dto.OrderSearch;
+import jpabook.jpashop.Dto.OrderSimpleDto;
 import jpabook.jpashop.Repository.OrderRepository;
-import jpabook.jpashop.Service.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,26 +41,8 @@ public class OrderSimpleApiController {
     @GetMapping("/api/v2/simple-orders")
     public Result ordersV2() {
         List<Order> orders = orderRepository.findAllBySearch(new OrderSearch());
-        List<SimpleOrderDto> collect = orders.stream().map(o -> new SimpleOrderDto(o)).collect(Collectors.toList());
+        List<OrderSimpleDto> collect = orders.stream().map(o -> new OrderSimpleDto(o)).collect(Collectors.toList());
         return new Result(collect);
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class SimpleOrderDto {
-        private Long orderId;
-        private String name;
-        private LocalDateTime orderDate;
-        private OrderStatus orderStatus;
-        private Address address;
-
-        public SimpleOrderDto(Order order) {
-            orderId = order.getId();
-            name = order.getMember().getName(); //Lazy 초기화
-            orderDate = order.getOrderDate();
-            orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress(); //Lazy 초기화
-        }
     }
 
     @Data
@@ -76,8 +55,15 @@ public class OrderSimpleApiController {
     @GetMapping("/api/v3/simple-orders")
     public Result ordersV3() {
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
-        List<SimpleOrderDto> collect = orders.stream().map(o -> new SimpleOrderDto(o)).collect(Collectors.toList());
+        List<OrderSimpleDto> collect = orders.stream().map(o -> new OrderSimpleDto(o)).collect(Collectors.toList());
         return new Result(collect);
+    }
+
+    //================주문조회 v4 (Repository에서 바로 Dto 반환)=================//   !재사용성이 떨어짐
+    @GetMapping("/api/v4/simple-orders")
+    public Result ordersV4() {
+        List<OrderSimpleDto> orders = orderRepository.findOrderDtos();
+        return new Result(orders);
     }
 
 }
