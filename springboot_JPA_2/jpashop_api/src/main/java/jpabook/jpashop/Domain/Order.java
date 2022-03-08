@@ -1,5 +1,6 @@
 package jpabook.jpashop.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpabook.jpashop.Domain.Enum.DeliveryStatus;
 import jpabook.jpashop.Domain.Enum.OrderStatus;
 import lombok.*;
