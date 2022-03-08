@@ -29,7 +29,7 @@ public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
 
-    //================주문조회 v1=================//
+    //================주문조회 v1 (entity직접 노출)=================//    #entity 직접 노출은 좋지않음
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
         List<Order> all = orderRepository.findAllBySearch(new OrderSearch());
@@ -40,7 +40,7 @@ public class OrderSimpleApiController {
         return all;
     }
 
-    //================주문조회 v2=================//
+    //================주문조회 v2 (Dto반환)=================// #N+1 문제
     @GetMapping("/api/v2/simple-orders")
     public Result ordersV2() {
         List<Order> orders = orderRepository.findAllBySearch(new OrderSearch());
@@ -72,6 +72,12 @@ public class OrderSimpleApiController {
         private T data;
     }
 
-
+    //================주문조회 v3 (fetch join)=================//
+    @GetMapping("/api/v3/simple-orders")
+    public Result ordersV3() {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> collect = orders.stream().map(o -> new SimpleOrderDto(o)).collect(Collectors.toList());
+        return new Result(collect);
+    }
 
 }

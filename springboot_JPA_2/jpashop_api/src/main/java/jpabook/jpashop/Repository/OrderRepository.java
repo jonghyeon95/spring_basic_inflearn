@@ -4,6 +4,7 @@ import jpabook.jpashop.Domain.Member;
 import jpabook.jpashop.Domain.Order;
 import jpabook.jpashop.Dto.OrderSearch;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -53,4 +54,11 @@ public class OrderRepository {
         return query.getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery() {
+
+        List<Order> resultList = em.createQuery("select o from Order o join fetch o.member m left join fetch o.delivery", Order.class)
+                .getResultList();
+
+        return resultList;
+    }
 }
