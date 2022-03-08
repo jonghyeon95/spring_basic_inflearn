@@ -20,7 +20,6 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @NotEmpty
     @Column(unique = true)
     private String name;
 
