@@ -8,7 +8,7 @@ import jpabook.jpashop.Domain.Order;
 import jpabook.jpashop.Domain.OrderItem;
 import jpabook.jpashop.Dto.OrderSearch;
 import jpabook.jpashop.Repository.ItemRepository;
-import jpabook.jpashop.Repository.MemberRepository;
+import jpabook.jpashop.Repository.MemberRepositoryOld;
 import jpabook.jpashop.Repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryOld memberRepository;
     private final ItemRepository itemRepository;
 
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
 
-        Member member = memberRepository.findByPk(memberId);
+        Member member = memberRepository.findById(memberId);
         Item item = itemRepository.findByPk(itemId);
         Delivery delivery = Delivery.builder().status(DeliveryStatus.READY).address(member.getAddress()).build();
 
