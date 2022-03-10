@@ -10,9 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +52,7 @@ public class OrderApiController {
         return new Result(collect);
     }
 
-    //================주문조회 v3 (fetch join)=================//
+    //================주문조회 v3 (fetch join, distinct)=================// #페이징문제
     @GetMapping("/api/v3/orders")
     public Result ordersV3(){
         List<Order> all = orderRepository.findAllWithItem();
@@ -58,7 +60,14 @@ public class OrderApiController {
         return new Result(collect);
     }
 
-
+    //================주문조회 v3.1 (page를 위한 batchsize)=================//
+    @GetMapping("/api/v3.1/orders")
+    public Result ordersV3_page(@RequestParam(required = false, defaultValue = "0") int offset,
+                                @RequestParam(required = false, defaultValue = "100") int limit){
+        List<Order> all = orderRepository.findAllWithMemberDelivery(offset, limit);
+        List<OrderDto> collect = all.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+        return new Result(collect);
+    }
 
 
     @Data
