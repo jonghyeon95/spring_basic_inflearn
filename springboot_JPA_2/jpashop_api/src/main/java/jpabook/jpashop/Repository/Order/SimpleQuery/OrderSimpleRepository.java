@@ -1,17 +1,10 @@
-package jpabook.jpashop.Repository.OrderSimpleRepository;
+package jpabook.jpashop.Repository.Order.SimpleQuery;
 
-import jpabook.jpashop.Domain.Member;
-import jpabook.jpashop.Domain.Order;
-import jpabook.jpashop.Dto.OrderSearch;
 import jpabook.jpashop.Dto.OrderSimpleDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository

@@ -4,7 +4,9 @@ import jpabook.jpashop.Domain.Address;
 import jpabook.jpashop.Domain.Enum.OrderStatus;
 import jpabook.jpashop.Domain.Order;
 import jpabook.jpashop.Domain.OrderItem;
+import jpabook.jpashop.Repository.Order.query.OrderQueryDto;
 import jpabook.jpashop.Dto.OrderSearch;
+import jpabook.jpashop.Repository.Order.query.OrderQueryRepository;
 import jpabook.jpashop.Repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     //================주문조회 v1 (entity직접 노출)=================//    #entity 직접 노출은 좋지않음
     @GetMapping("/api/v1/orders")
@@ -69,6 +71,14 @@ public class OrderApiController {
         return new Result(collect);
     }
 
+    //================주문조회 v4 (dto 직접 조회)=================//컬렉션 조회때 N+1문제
+    @GetMapping("/api/v4/orders")
+    public Result ordersV4() {
+        List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDtos();
+
+        return new Result(orders);
+    }
+
 
     @Data
     static class OrderDto {
@@ -103,7 +113,6 @@ public class OrderApiController {
             count = orderItem.getCount();
         }
     }
-
 
     @Data
     @AllArgsConstructor
