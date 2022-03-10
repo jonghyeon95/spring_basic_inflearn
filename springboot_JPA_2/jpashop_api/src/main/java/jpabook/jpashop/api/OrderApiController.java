@@ -27,8 +27,9 @@ public class OrderApiController {
 
     private final OrderRepository orderRepository;
 
+    //================주문조회 v1 (entity직접 노출)=================//    #entity 직접 노출은 좋지않음
     @GetMapping("/api/v1/orders")
-    public Result ordersV1(){   //Entity 직접노출
+    public Result ordersV1(){
         List<Order> all = orderRepository.findAllBySearch(new OrderSearch());
         for (Order order : all) {
             order.getMember();
@@ -41,12 +42,24 @@ public class OrderApiController {
         return new Result(all);
     }
 
+    //================주문조회 v2 (Dto반환, OrderItem에 대한 Dto 생성)=================// #N+1 문제
     @GetMapping("/api/v2/orders")
-    public Result ordersV2(){   //N+1문제
+    public Result ordersV2(){
         List<Order> all = orderRepository.findAllBySearch(new OrderSearch());
         List<OrderDto> collect = all.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
         return new Result(collect);
     }
+
+    //================주문조회 v3 (fetch join)=================//
+    @GetMapping("/api/v3/orders")
+    public Result ordersV3(){
+        List<Order> all = orderRepository.findAllWithItem();
+        List<OrderDto> collect = all.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+        return new Result(collect);
+    }
+
+
+
 
     @Data
     static class OrderDto {
