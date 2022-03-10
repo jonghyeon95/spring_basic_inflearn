@@ -79,6 +79,14 @@ public class OrderApiController {
         return new Result(orders);
     }
 
+    //================주문조회 v5 (where 조건에 IN 을 이용해 쿼리2번으로 변경)=================//
+    @GetMapping("/api/v5/orders")
+    public Result ordersV5() {
+        List<OrderQueryDto> orders = orderQueryRepository.findAllByDto_optimization();
+
+        return new Result(orders);
+    }
+
 
     @Data
     static class OrderDto {
