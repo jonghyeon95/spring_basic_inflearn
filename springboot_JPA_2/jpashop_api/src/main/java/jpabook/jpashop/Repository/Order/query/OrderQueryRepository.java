@@ -14,6 +14,7 @@ public class OrderQueryRepository {
 
     private final EntityManager em;
 
+    //===공통===
     private List<OrderQueryDto> findOrders() {
         List<OrderQueryDto> resultList =
                 em.createQuery("select new jpabook.jpashop.Repository.Order.query.OrderQueryDto(o.id, m.name, o.orderDate, o.status, d.address)" +
@@ -22,6 +23,7 @@ public class OrderQueryRepository {
         return resultList;
     }
 
+    //===V4 where을 이용해 collector 를 처리===
     public List<OrderQueryDto> findOrderQueryDtos() {
         List<OrderQueryDto> result = findOrders();
         result.stream().forEach(o -> {
@@ -39,6 +41,8 @@ public class OrderQueryRepository {
                 .getResultList();
     }
 
+
+    //===V5 where In을 이용해 collector 를 처리===
     public List<OrderQueryDto> findAllByDto_optimization() {
         List<OrderQueryDto> result = findOrders();
 
@@ -64,5 +68,16 @@ public class OrderQueryRepository {
     private List<Long> toOrdersIds(List<OrderQueryDto> result) {
         List<Long> orderIds = result.stream().map(o -> o.getOrderId()).collect(Collectors.toList());
         return orderIds;
+    }
+
+    //===V6 뻥튀긴 된 데이터를 그냥 가져옴===
+    public List<OrderFlatDto> findAllByDto_flat() {
+
+        List<OrderFlatDto> result = em.createQuery(
+                "select new jpabook.jpashop.Repository.Order.query.OrderFlatDto(o.id, m.name, o.orderDate, o.status, o.delivery.address, i.name, oi.orderPrice, oi.count) " +
+                                "from Order o join o.member m join o.delivery d join o.orderItems oi join oi.item i", OrderFlatDto.class)
+                .getResultList();
+
+        return result;
     }
 }

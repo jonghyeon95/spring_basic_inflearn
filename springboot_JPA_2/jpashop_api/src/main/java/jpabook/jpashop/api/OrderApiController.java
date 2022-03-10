@@ -4,6 +4,8 @@ import jpabook.jpashop.Domain.Address;
 import jpabook.jpashop.Domain.Enum.OrderStatus;
 import jpabook.jpashop.Domain.Order;
 import jpabook.jpashop.Domain.OrderItem;
+import jpabook.jpashop.Repository.Order.query.OrderFlatDto;
+import jpabook.jpashop.Repository.Order.query.OrderItemQueryDto;
 import jpabook.jpashop.Repository.Order.query.OrderQueryDto;
 import jpabook.jpashop.Dto.OrderSearch;
 import jpabook.jpashop.Repository.Order.query.OrderQueryRepository;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * xToMany 조회
@@ -85,6 +89,25 @@ public class OrderApiController {
         List<OrderQueryDto> orders = orderQueryRepository.findAllByDto_optimization();
 
         return new Result(orders);
+    }
+
+    //================주문조회 v6 (뻥튀긴된 데이터 그냥 가져와서 OrderItem을 List화 시킴)=================//추가작업이 큼, 페이징 불가
+    @GetMapping("/api/v6/orders")
+    public Result ordersV6() {
+        List<OrderFlatDto> flats = orderQueryRepository.findAllByDto_flat();
+
+        List<OrderQueryDto> collect = flats.stream()
+                .collect(groupingBy(o -> new OrderQueryDto(o.getOrderId(),
+                                o.getName(), o.getOrderDate(), o.getOrderStatus(), o.getAddress()),
+                        mapping(o -> new OrderItemQueryDto(o.getOrderId(),
+                                o.getItemName(), o.getOrderPrice(), o.getCount()), toList())
+                )).entrySet().stream()
+                .map(e -> new OrderQueryDto(e.getKey().getOrderId(),
+                        e.getKey().getName(), e.getKey().getOrderDate(), e.getKey().getOrderStatus(),
+                        e.getKey().getAddress(), e.getValue()))
+                .collect(toList());
+
+        return new Result(collect);
     }
 
 
