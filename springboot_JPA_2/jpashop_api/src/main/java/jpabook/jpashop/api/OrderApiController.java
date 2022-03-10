@@ -1,5 +1,7 @@
 package jpabook.jpashop.api;
 
+import jpabook.jpashop.Domain.Address;
+import jpabook.jpashop.Domain.Enum.OrderStatus;
 import jpabook.jpashop.Domain.Order;
 import jpabook.jpashop.Domain.OrderItem;
 import jpabook.jpashop.Dto.OrderSearch;
@@ -10,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * xToMany 조회
@@ -37,7 +41,46 @@ public class OrderApiController {
         return new Result(all);
     }
 
+    @GetMapping("/api/v2/orders")
+    public Result ordersV2(){   //N+1문제
+        List<Order> all = orderRepository.findAllBySearch(new OrderSearch());
+        List<OrderDto> collect = all.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+        return new Result(collect);
+    }
 
+    @Data
+    static class OrderDto {
+
+        private Long orderId;
+        private String name;
+        private LocalDateTime orderDate;
+        private OrderStatus orderStatus;
+        private Address address;
+        private List<OrderItemDto> orderItems;
+
+        public OrderDto(Order order) {
+            orderId = order.getId();
+            name = order.getMember().getName(); //Lazy 초기화
+            orderDate = order.getOrderDate();
+            orderStatus = order.getStatus();
+            address = order.getDelivery().getAddress(); //Lazy 초기화
+            orderItems = order.getOrderItems().stream().map(orderItem -> new OrderItemDto(orderItem)).collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    static class OrderItemDto {
+
+        private String itemName;    //상품명
+        private int orderPrice;
+        private int count;  //주문수량
+
+        public OrderItemDto(OrderItem orderItem) {
+            itemName = orderItem.getItem().getName();
+            orderPrice = orderItem.getOrderPrice();
+            count = orderItem.getCount();
+        }
+    }
 
 
     @Data
@@ -45,4 +88,6 @@ public class OrderApiController {
     static class Result<T> {
         private T data;
     }
+
+
 }
