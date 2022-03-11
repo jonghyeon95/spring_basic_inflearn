@@ -11,9 +11,9 @@ import study.datajpa.Entity.Team;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -92,7 +92,7 @@ class MemberRepositoryTest {
         memberRepository.save(m1);
         memberRepository.save(m2);
 
-        List<Member> result = memberRepository.findByUsername("aaa");
+        List<Member> result = memberRepository.findNameQueryByUsername("aaa");
 
         for (Member member : result) {
             System.out.println("member = " + member);
@@ -142,4 +142,19 @@ class MemberRepositoryTest {
         }
     }
 
+    @Test
+    public void testReturnType() throws Exception {
+        Member m1 = Member.builder().username("aaa").age(10).build();
+        Member m2 = Member.builder().username("bbb").age(20).build();
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> findMember1 = memberRepository.findListByUsername("aaa");  //없을때 빈 컬렉션
+        Member findMember2 = memberRepository.findMemberByUsername("aaa");  //없을때 null
+        Optional<Member> findMember3 = memberRepository.findOptionalByUsername("aaa");
+//
+        System.out.println("findMember1 = " + findMember1.get(0));
+        System.out.println("findMember2 = " + findMember2);
+        System.out.println("findMember3 = " + findMember3.orElse(null));
+    }
 }
