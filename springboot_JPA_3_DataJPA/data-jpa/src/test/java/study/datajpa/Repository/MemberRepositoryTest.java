@@ -4,6 +4,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.Dto.MemberDto;
 import study.datajpa.Entity.Member;
@@ -156,5 +160,72 @@ class MemberRepositoryTest {
         System.out.println("findMember1 = " + findMember1.get(0));
         System.out.println("findMember2 = " + findMember2);
         System.out.println("findMember3 = " + findMember3.orElse(null));
+    }
+
+    @Test
+    public void testPaging() throws Exception {
+        //given
+        memberRepository.save(Member.builder().username("a1").age(10).build());
+        memberRepository.save(Member.builder().username("a2").age(10).build());
+        memberRepository.save(Member.builder().username("a3").age(10).build());
+        memberRepository.save(Member.builder().username("a4").age(10).build());
+        memberRepository.save(Member.builder().username("a5").age(10).build());
+        memberRepository.save(Member.builder().username("a6").age(9).build());
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        PageRequest pageRequest = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "username"));
+
+        //when
+        Page<Member> page = memberRepository.findPagingByAge(age, pageRequest);
+
+        Page<MemberDto> toMap = page.map(member -> new MemberDto(member.getId(), member.getUsername(), null));
+        //then
+//        List<Member> content = page.getContent();
+//        for (Member member : content) {
+//            System.out.println("member = " + member);
+//        }
+
+        assertThat(page.getTotalElements()).isEqualTo(5);   //전체갯수
+        assertThat(page.getNumber()).isEqualTo(0);  //현재페이지
+        assertThat(page.getTotalPages()).isEqualTo(2);   //전체페이지
+        assertThat(page.isFirst()).isTrue();    //첫번째페이지냐?
+        assertThat(page.hasNext()).isTrue();    //다음페이지가 존재하는가?
+
+        assertThat(toMap.getTotalElements()).isEqualTo(5);   //전체갯수
+        assertThat(toMap.getNumber()).isEqualTo(0);  //현재페이지
+        assertThat(toMap.getTotalPages()).isEqualTo(2);   //전체페이지
+        assertThat(toMap.isFirst()).isTrue();    //첫번째페이지냐?
+        assertThat(toMap.hasNext()).isTrue();    //다음페이지가 존재하는가?
+    }
+
+    @Test
+    public void testSlice() throws Exception {
+        //given
+        memberRepository.save(Member.builder().username("a1").age(10).build());
+        memberRepository.save(Member.builder().username("a2").age(10).build());
+        memberRepository.save(Member.builder().username("a3").age(10).build());
+        memberRepository.save(Member.builder().username("a4").age(10).build());
+        memberRepository.save(Member.builder().username("a5").age(10).build());
+        memberRepository.save(Member.builder().username("a6").age(9).build());
+
+        int age = 10;
+        int offset = 0;
+        int limit = 4;
+
+        PageRequest pageRequest = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "username"));   //limit보다 한개더 가져옴
+
+        //when
+        Slice<Member> slice = memberRepository.findSliceByAge(age, pageRequest);
+
+        System.out.println("slice.getSize() = " + slice.getSize());
+        System.out.println("slice.getContent().size() = " + slice.getContent().size());
+        System.out.println("slice.getNumber() = " + slice.getNumber());
+        System.out.println("slice.isFirst() = " + slice.isFirst());
+        System.out.println("slice.isLast() = " + slice.isLast());
+        System.out.println("slice.hasNext() = " + slice.hasNext());
+        System.out.println("slice.hasPrevious() = " + slice.hasPrevious());
     }
 }
