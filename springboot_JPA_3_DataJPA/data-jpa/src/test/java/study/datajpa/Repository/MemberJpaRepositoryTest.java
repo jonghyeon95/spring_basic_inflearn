@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.Entity.Member;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -26,7 +29,29 @@ class MemberJpaRepositoryTest {
         Member findMember = memberJpaRepository.find(saveMember.getId());
 
         //then
-        Assertions.assertThat(findMember).isEqualTo(member);
+        assertThat(findMember).isEqualTo(member);
+    }
+
+    @Test
+    public void basicCRUD() throws Exception {
+        Member member1 = Member.builder().username("mem1").build();
+        Member member2 = Member.builder().username("mem2").build();
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+
+        Member findMember1 = memberJpaRepository.findById(member1.getId()).get();
+        Member findMember2 = memberJpaRepository.findById(member2.getId()).get();
+
+        assertThat(findMember1).isEqualTo(member1);
+        assertThat(findMember2).isEqualTo(member2);
+
+        long count = memberJpaRepository.count();
+        assertThat(count).isEqualTo(2);
+
+        memberJpaRepository.delete(member1);
+        memberJpaRepository.delete(member2);
+        List<Member> all = memberJpaRepository.findAll();
+        assertThat(all.size()).isEqualTo(0);
     }
 
 }
