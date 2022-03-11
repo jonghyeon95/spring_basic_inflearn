@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.Dto.MemberDto;
 import study.datajpa.Entity.Member;
+import study.datajpa.Entity.Team;
 
 import java.util.List;
 
@@ -18,7 +20,8 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
-
+    @Autowired
+    TeamRepository teamRepository;
     @Test
     public void testMember() throws Exception {
 
@@ -85,7 +88,6 @@ class MemberRepositoryTest {
     public void namedQuery() throws Exception {
         Member m1 = Member.builder().username("aaa").age(10).build();
         Member m2 = Member.builder().username("aaa").age(20).build();
-
         memberRepository.save(m1);
         memberRepository.save(m2);
 
@@ -102,13 +104,27 @@ class MemberRepositoryTest {
     public void testQuery() throws Exception {
         Member m1 = Member.builder().username("aaa").age(10).build();
         Member m2 = Member.builder().username("aaa").age(20).build();
-
         memberRepository.save(m1);
         memberRepository.save(m2);
 
         List<Member> findMembers = memberRepository.findUser("aaa", 10);
         assertThat(findMembers.size()).isEqualTo(1);
-
     }
+
+    @Test
+    public void testDtoQuery() throws Exception {
+        Member m1 = Member.builder().username("aaa").age(10).build();
+        memberRepository.save(m1);
+
+        Team teamA = Team.builder().name("teamA").build();
+        teamA.changeTeam(m1);
+        teamRepository.save(teamA);
+
+        List<MemberDto> memberDto = memberRepository.findMemberDto();
+        for (MemberDto dto : memberDto) {
+            System.out.println("dto = " + dto);
+        }
+    }
+
 
 }
