@@ -75,10 +75,26 @@ class MemberRepositoryTest {
     }
     
     @Test
-    public void hello() throws Exception {
+    public void findTop3By() throws Exception {
 
         List<Member> top3HelloBy = memberRepository.findTop3HelloBy();
         System.out.println("top3HelloBy.size() = " + top3HelloBy.size());
     }
 
+    @Test
+    public void namedQuery() throws Exception {
+        Member m1 = Member.builder().username("aaa").age(10).build();
+        Member m2 = Member.builder().username("aaa").age(20).build();
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> result = memberRepository.findByUsername("aaa");
+
+        for (Member member : result) {
+            System.out.println("member = " + member);
+        }
+
+        assertThat(result.get(0)).isEqualTo(m1);
+    }
 }

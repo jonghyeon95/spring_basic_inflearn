@@ -64,7 +64,23 @@ class MemberJpaRepositoryTest {
         List<Member> result = memberJpaRepository.findByUsernameAndAgeGreaterThan("aaa", 15);
 
         assertThat(result.get(0)).isEqualTo(m2);
+    }
 
+    @Test
+    public void namedQuery() throws Exception {
+        Member m1 = Member.builder().username("aaa").age(10).build();
+        Member m2 = Member.builder().username("aaa").age(20).build();
+
+        memberJpaRepository.save(m1);
+        memberJpaRepository.save(m2);
+
+        List<Member> result = memberJpaRepository.findByUsername("aaa");
+
+        for (Member member : result) {
+            System.out.println("member = " + member);
+        }
+
+        assertThat(result.get(0)).isEqualTo(m1);
     }
 
 }

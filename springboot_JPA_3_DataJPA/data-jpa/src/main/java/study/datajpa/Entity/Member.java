@@ -10,6 +10,10 @@ import javax.persistence.*;
 @ToString
 @EqualsAndHashCode
 @Builder @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedQuery(
+        name = "Member.findMemberByUsername",
+        query = "select m from Member m where m.username =:username"
+)
 public class Member {
 
     @Id @GeneratedValue
