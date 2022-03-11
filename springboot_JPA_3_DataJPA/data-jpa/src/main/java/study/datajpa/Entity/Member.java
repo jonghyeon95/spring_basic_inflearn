@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @ToString
-//@EqualsAndHashCode
+@EqualsAndHashCode
 @Builder @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
@@ -17,6 +17,8 @@ public class Member {
     private Long id;
 
     private String username;
+
+    private int age;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

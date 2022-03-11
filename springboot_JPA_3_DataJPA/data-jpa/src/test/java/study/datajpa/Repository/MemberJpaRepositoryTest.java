@@ -1,6 +1,5 @@
 package study.datajpa.Repository;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +9,6 @@ import study.datajpa.Entity.Member;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -52,6 +50,21 @@ class MemberJpaRepositoryTest {
         memberJpaRepository.delete(member2);
         List<Member> all = memberJpaRepository.findAll();
         assertThat(all.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void findByUsernameAndAgeGreaterThan() throws Exception {
+
+        Member m1 = Member.builder().username("aaa").age(10).build();
+        Member m2 = Member.builder().username("aaa").age(20).build();
+
+        memberJpaRepository.save(m1);
+        memberJpaRepository.save(m2);
+
+        List<Member> result = memberJpaRepository.findByUsernameAndAgeGreaterThan("aaa", 15);
+
+        assertThat(result.get(0)).isEqualTo(m2);
+
     }
 
 }
