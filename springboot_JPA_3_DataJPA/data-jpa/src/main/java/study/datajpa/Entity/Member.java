@@ -1,20 +1,26 @@
 package study.datajpa.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@ToString
 //@EqualsAndHashCode
-@Builder @AllArgsConstructor @NoArgsConstructor
+@Builder @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
 
     private String username;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
 
 }
