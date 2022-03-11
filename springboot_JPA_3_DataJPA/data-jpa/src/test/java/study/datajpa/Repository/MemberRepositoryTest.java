@@ -13,6 +13,7 @@ import study.datajpa.Dto.MemberDto;
 import study.datajpa.Entity.Member;
 import study.datajpa.Entity.Team;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,9 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
     @Autowired
     TeamRepository teamRepository;
+    @Autowired
+    EntityManager em;
+
     @Test
     public void testMember() throws Exception {
 
@@ -228,4 +232,26 @@ class MemberRepositoryTest {
         System.out.println("slice.hasNext() = " + slice.hasNext());
         System.out.println("slice.hasPrevious() = " + slice.hasPrevious());
     }
+
+    @Test
+    public void bulkUpdate() throws Exception {
+        //given
+        memberRepository.save(Member.builder().username("a1").age(10).build());
+        memberRepository.save(Member.builder().username("a2").age(19).build());
+        memberRepository.save(Member.builder().username("a3").age(20).build());
+        memberRepository.save(Member.builder().username("a4").age(21).build());
+        memberRepository.save(Member.builder().username("a5").age(40).build());
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+
+//        em.clear();
+
+        Member member5 = memberRepository.findMemberByUsername("a5");
+        System.out.println("member5 = " + member5);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+    }
+    
 }
