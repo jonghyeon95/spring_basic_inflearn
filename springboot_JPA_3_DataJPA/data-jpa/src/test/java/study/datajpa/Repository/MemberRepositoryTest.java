@@ -4,10 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.Dto.MemberDto;
 import study.datajpa.Entity.Member;
@@ -326,5 +323,31 @@ class MemberRepositoryTest {
         System.out.println("findMember.getCreatedBy() = " + findMember.getCreatedBy());
         System.out.println("findMember.getLastModifiedBy() = " + findMember.getLastModifiedBy());
     }
-    
+
+    @Test
+    public void queryByExample() throws Exception {
+        //given
+        Team teamA = Team.builder().name("teamA").build();
+        em.persist(teamA);
+
+        Member m1 = Member.builder().username("m1").team(teamA).build();
+        Member m2 = Member.builder().username("m2").team(teamA).build();
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        //when
+        //Probe
+        Member searchMember = Member.builder().username("m1").team(Team.builder().name("teamA").build()).build();
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("age");
+        Example<Member> example = Example.of(searchMember, matcher);
+        List<Member> all = memberRepository.findAll(example);
+        System.out.println("all = " + all);
+
+        //then
+
+    }
+
 }
