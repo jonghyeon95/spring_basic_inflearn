@@ -5,11 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
-import study.datajpa.Dto.MemberDto;
-import study.datajpa.Dto.NestedClosedProjections;
-import study.datajpa.Dto.UsernameOnly;
+import study.datajpa.Dto.*;
 import study.datajpa.Entity.Member;
-import study.datajpa.Dto.UsernameOnlyDto;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
@@ -89,13 +86,18 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     List<UsernameOnly> findProjectionsInterfaceByUsername(@Param("username") String username);
 
     List<UsernameOnlyDto> findProjectionsDtoByUsername(@Param("username") String username);
-    <T> List<T> findProjectionsDtoGenericByUsername(@Param("username") String username, Class<T> type);
-
+    <T> List<T> findProjectionsDtoGenericByUsername(@Param("username") String username, Class<T> type); //위에꺼 제네릭 사용
 
     List<NestedClosedProjections> findNestedClosedProjectionsByUsername(@Param("username") String username);
 
-    //=======aa=======
-    //=======aa=======
+    //=======NativeQuery=======
 
+    @Query(value = "select * from member where username = ?", nativeQuery = true)
+    Member findByNativeQuery(String username);
+
+    @Query(value = "select m.member_id as id, m.username, t.name as teamName from member m left join team t",
+            countQuery = "select count(*) from member",
+            nativeQuery = true)
+    Page<MemberProjection> findByNativeProjection(Pageable pageable);
 
 }

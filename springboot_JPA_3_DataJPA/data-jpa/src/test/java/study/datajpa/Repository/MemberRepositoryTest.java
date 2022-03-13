@@ -6,12 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
 import org.springframework.transaction.annotation.Transactional;
-import study.datajpa.Dto.MemberDto;
-import study.datajpa.Dto.NestedClosedProjections;
-import study.datajpa.Dto.UsernameOnly;
+import study.datajpa.Dto.*;
 import study.datajpa.Entity.Member;
 import study.datajpa.Entity.Team;
-import study.datajpa.Dto.UsernameOnlyDto;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
@@ -392,6 +389,36 @@ class MemberRepositoryTest {
             System.out.println("nestedClosedProjections.getUsername() = " + nestedClosedProjections.getUsername());
             System.out.println("nestedClosedProjections.getUsername() = " + nestedClosedProjections.getTeam());
         }
+        //then
+    }
+
+    @Test
+    public void nativeQuery() throws Exception {
+        //given
+        Team teamA = Team.builder().name("teamA").build();
+        em.persist(teamA);
+
+        Member m1 = Member.builder().username("m1").age(15).team(teamA).build();
+        Member m2 = Member.builder().username("m2").age(16).team(teamA).build();
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        //when
+        Member result = memberRepository.findByNativeQuery("m1");
+        System.out.println("result = " + result);
+
+        em.clear();
+
+        Page<MemberProjection> result2 = memberRepository.findByNativeProjection(PageRequest.of(0, 10));
+        for (MemberProjection memberProjection : result2.getContent()) {
+            System.out.println("memberProjection = " + memberProjection.getId());
+            System.out.println("memberProjection = " + memberProjection.getUsername());
+            System.out.println("memberProjection = " + memberProjection.getTeamName());
+        }
+
         //then
 
     }
