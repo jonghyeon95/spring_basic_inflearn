@@ -256,7 +256,6 @@ class MemberRepositoryTest {
     
     @Test
     public void findMemberLazy() throws Exception {
-        //given
         Team teamA = Team.builder().name("teamA").build();
         Team teamB = Team.builder().name("teamB").build();
         teamRepository.save(teamA);
@@ -268,7 +267,7 @@ class MemberRepositoryTest {
         memberRepository.save(memberB);
         em.flush();
         em.clear();
-        //when
+
 //        List<Member> members = memberRepository.findAll();
 //        List<Member> members = memberRepository.findMemberFetchJoin();
         List<Member> members = memberRepository.findEntityGraphByUsername("member1");
@@ -276,9 +275,33 @@ class MemberRepositoryTest {
             System.out.println("member = " + member.getUsername());
             System.out.println("member.getTeam().getName() = " + member.getTeam().getName());
         }
+    }
+
+    @Test
+    public void queryHint() throws Exception {
+        //given
+        Member member = memberRepository.save(Member.builder().username("member1").age(10).build());
+        em.flush();
+        em.clear();
+        //when
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");
+        em.flush();
+        //then
+    }
+
+    @Test
+    public void queryLock() throws Exception {
+        //given
+        Member member = memberRepository.save(Member.builder().username("member1").age(10).build());
+        em.flush();
+        em.clear();
+        //when
+        List<Member> members = memberRepository.findLockByUsername("member1");
+
 
         //then
-    
+
     }
     
 }
