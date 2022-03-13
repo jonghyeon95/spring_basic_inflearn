@@ -78,13 +78,13 @@ public class MemberController {
     @PostConstruct
     public void init(){
 
-        for (int i = 0; i < 10; i++) {
-            teamRepository.save(Team.builder().name("team" + i).build());
-        }
-
-        for (int i = 0; i < 100; i++) {
-            memberRepository.save(Member.builder().username("member" + i).age(i).build());
-        }
+//        for (int i = 0; i < 10; i++) {
+//            teamRepository.save(Team.builder().name("team" + i).build());
+//        }
+//
+//        for (int i = 0; i < 100; i++) {
+//            memberRepository.save(Member.builder().username("member" + i).age(i).build());
+//        }
     }
 
 
