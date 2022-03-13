@@ -380,6 +380,13 @@ class MemberRepositoryTest {
         }
 
         em.clear();
+        List<UsernameOnlyDto> result2_2 = memberRepository.findProjectionsDtoGenericByUsername("m1", UsernameOnlyDto.class);
+        for (UsernameOnlyDto usernameOnlyDto : result2_2) {
+            System.out.println("usernameOnlyDto.getUsername() = " + usernameOnlyDto.getUsername());
+            System.out.println("usernameOnlyDto.getUsername() = " + usernameOnlyDto.getAge());
+        }
+
+        em.clear();
         List<NestedClosedProjections> result3 = memberRepository.findNestedClosedProjectionsByUsername("m1");
         for (NestedClosedProjections nestedClosedProjections : result3) {
             System.out.println("nestedClosedProjections.getUsername() = " + nestedClosedProjections.getUsername());
