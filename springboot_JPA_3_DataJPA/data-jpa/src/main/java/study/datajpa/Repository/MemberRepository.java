@@ -1,19 +1,19 @@
 package study.datajpa.Repository;
 
-import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import study.datajpa.Dto.MemberDto;
+import study.datajpa.Dto.NestedClosedProjections;
+import study.datajpa.Dto.UsernameOnly;
 import study.datajpa.Entity.Member;
+import study.datajpa.Dto.UsernameOnlyDto;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,7 +85,13 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     List<Member> findLockByUsername(String username);
 
 
-    //=======aa=======
+    //=======projections=======
+    List<UsernameOnly> findProjectionsInterfaceByUsername(@Param("username") String username);
+
+    List<UsernameOnlyDto> findProjectionsDtoByUsername(@Param("username") String username);
+
+    List<NestedClosedProjections> findNestedClosedProjectionsByUsername(@Param("username") String username);
+
     //=======aa=======
     //=======aa=======
 

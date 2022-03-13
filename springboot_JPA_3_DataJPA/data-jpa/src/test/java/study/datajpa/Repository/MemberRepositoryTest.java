@@ -7,8 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.Dto.MemberDto;
+import study.datajpa.Dto.NestedClosedProjections;
+import study.datajpa.Dto.UsernameOnly;
 import study.datajpa.Entity.Member;
 import study.datajpa.Entity.Team;
+import study.datajpa.Dto.UsernameOnlyDto;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
@@ -346,6 +349,42 @@ class MemberRepositoryTest {
         List<Member> all = memberRepository.findAll(example);
         System.out.println("all = " + all);
 
+        //then
+
+    }
+
+    @Test
+    public void projections() throws Exception {
+        //given
+        Team teamA = Team.builder().name("teamA").build();
+        em.persist(teamA);
+
+        Member m1 = Member.builder().username("m1").age(15).team(teamA).build();
+        Member m2 = Member.builder().username("m1").age(16).team(teamA).build();
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        //when
+        List<UsernameOnly> result = memberRepository.findProjectionsInterfaceByUsername("m1");
+        for (UsernameOnly username : result) {
+            System.out.println("username = " + username.getUsername());
+        }
+        em.clear();
+        List<UsernameOnlyDto> result2 = memberRepository.findProjectionsDtoByUsername("m1");
+        for (UsernameOnlyDto usernameOnlyDto : result2) {
+            System.out.println("usernameOnlyDto.getUsername() = " + usernameOnlyDto.getUsername());
+            System.out.println("usernameOnlyDto.getUsername() = " + usernameOnlyDto.getAge());
+        }
+
+        em.clear();
+        List<NestedClosedProjections> result3 = memberRepository.findNestedClosedProjectionsByUsername("m1");
+        for (NestedClosedProjections nestedClosedProjections : result3) {
+            System.out.println("nestedClosedProjections.getUsername() = " + nestedClosedProjections.getUsername());
+            System.out.println("nestedClosedProjections.getUsername() = " + nestedClosedProjections.getTeam());
+        }
         //then
 
     }
