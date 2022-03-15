@@ -1,5 +1,6 @@
 package study.querydsl;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static study.querydsl.Entity.QMember.*;
 
 @SpringBootTest
 @Transactional
@@ -57,16 +59,65 @@ public class QuerydslBasicTest {
 
     @Test
     public void startQuerydsl() throws Exception {
-        QMember m = QMember.member;
+        QMember m = member;
 
         Member findMember = queryFactory.select(m)
                 .from(m)
                 .where(m.username.eq("member1"))
                 .fetchOne();
         assertThat(findMember.getUsername()).isEqualTo("member1");
-
     }
 
+    @Test
+    public void search() throws Exception {
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1").
+                        and(member.age.between(10, 30)))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void searchAndParam() throws Exception {
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1"),
+                        (member.age.eq(10)))
+                .fetchOne();
+
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void resultFetch() throws Exception {
+//        List<Member> fetch = queryFactory
+//                .selectFrom(member)
+//                .fetch();
+//
+//        Member fetchOne = queryFactory
+//                .selectFrom(QMember.member)
+//                .fetchOne();
+//
+//        Member fetchFirst = queryFactory
+//                .selectFrom(QMember.member)
+//                .fetchFirst();
+//
+//        QueryResults<Member> fetchResults = queryFactory    //카운트까지 가져옴
+//                .selectFrom(member)
+//                .fetchResults();
+//
+//        fetchResults.getTotal();
+//        List<Member> content = fetchResults.getResults();
+
+        queryFactory
+                .selectFrom(member)
+                .fetchCount();
+
+    }
 
 }
 
