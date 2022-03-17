@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -97,7 +98,7 @@ class MemberRepositoryTest {
 
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        PageImpl<MemberTeamDto> result = memberRepository.searchPageSimple(condition, pageRequest);
+        Page<MemberTeamDto> result = memberRepository.searchPageSimple(condition, pageRequest);
         assertThat(result.getSize()).isEqualTo(3);
         assertThat(result.getContent()).extracting("username").contains("member1", "member2", "member3");
     }

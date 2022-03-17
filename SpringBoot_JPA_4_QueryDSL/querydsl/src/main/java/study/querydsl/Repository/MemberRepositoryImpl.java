@@ -2,14 +2,18 @@ package study.querydsl.Repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 import study.querydsl.Dto.MemberSearchCondition;
 import study.querydsl.Dto.MemberTeamDto;
 import study.querydsl.Dto.QMemberTeamDto;
+import study.querydsl.Entity.Member;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -38,7 +42,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public PageImpl<MemberTeamDto> searchPageSimple(MemberSearchCondition condition, Pageable pageable) {
+    public Page<MemberTeamDto> searchPageSimple(MemberSearchCondition condition, Pageable pageable) {
         QueryResults<MemberTeamDto> result = queryFactory
                 .select(new QMemberTeamDto(member.id, member.username, member.age, team.id, team.name))
                 .from(member)
@@ -57,7 +61,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public PageImpl<MemberTeamDto> searchPageComplex(MemberSearchCondition condition, Pageable pageable) {
+    public Page<MemberTeamDto> searchPageComplex(MemberSearchCondition condition, Pageable pageable) {
         List<MemberTeamDto> content = queryFactory
                 .select(new QMemberTeamDto(member.id, member.username, member.age, team.id, team.name))
                 .from(member)
@@ -70,16 +74,16 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        long total = queryFactory
+        JPAQuery<Member> countQuery = queryFactory
                 .selectFrom(member)
                 .leftJoin(member.team, team)
                 .where(usernameEq(condition.getUsername()),
                         teamNameEq(condition.getTeamName()),
                         ageGoe(condition.getAgeGoe()),
-                        ageLoe(condition.getAgeLoe()))
-                .fetchCount();
+                        ageLoe(condition.getAgeLoe()));
 
-        return new PageImpl<>(content, pageable, total);
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+//        return new PageImpl<>(content, pageable, total);
     }
 
 
