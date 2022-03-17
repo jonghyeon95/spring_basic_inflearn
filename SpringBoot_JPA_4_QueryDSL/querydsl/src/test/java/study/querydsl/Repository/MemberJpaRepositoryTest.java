@@ -108,4 +108,12 @@ class MemberJpaRepositoryTest {
         }
     }
 
+//    @Test
+//    public void searchTest() throws Exception {
+//        MemberSearchCondition condition = new MemberSearchCondition();
+//
+//        List<Member> members = memberJpaRepository.searchMember(condition);
+//
+//    }
+
 }
