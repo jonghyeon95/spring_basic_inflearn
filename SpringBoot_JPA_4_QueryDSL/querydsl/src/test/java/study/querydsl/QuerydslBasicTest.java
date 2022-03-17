@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.Dto.MemberDto;
 import study.querydsl.Dto.QMemberDto;
@@ -419,7 +420,9 @@ public class QuerydslBasicTest {
             System.out.println("tuple = " + tuple);
         }
     }
-    
+
+    //=======DTO 매핑
+
     @Test
     public void tupleProjection() throws Exception {
 
@@ -522,7 +525,7 @@ public class QuerydslBasicTest {
         }
     }
 
-
+    //======동적쿼리
     @Test
     public void dynamicQueryByBooleanBuilder() throws Exception {
 
@@ -581,8 +584,41 @@ public class QuerydslBasicTest {
         return new BooleanBuilder(ageParam != null ? member.age.eq(ageParam) : null);
     }
 
+    //====벌크연산
+    @Test
+    public void bulkUpdate() throws Exception {
 
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
 
+        em.clear();
+
+        List<Member> members = queryFactory
+                .selectFrom(member)
+                .fetch();
+        System.out.println("members = " + members);
+    }
+
+    @Test
+    public void bulkAdd() throws Exception {
+        long count = queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+    }
+
+    @Test
+    public void bulkDelete() throws Exception {
+
+        long execute = queryFactory
+                .delete(member)
+                .where(member.age.lt(11))
+                .execute();
+        System.out.println("execute = " + execute);
+    }
 
 }
 
