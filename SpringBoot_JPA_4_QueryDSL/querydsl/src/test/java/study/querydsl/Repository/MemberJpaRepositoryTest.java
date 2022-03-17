@@ -92,4 +92,20 @@ class MemberJpaRepositoryTest {
         assertThat(result).extracting("username").contains("member4");
     }
 
+    @Test
+    public void searchTestByWhere() throws Exception {
+
+        MemberSearchCondition condition = new MemberSearchCondition();
+//        condition.setAgeGoe(35);
+//        condition.setAgeLoe(40);
+//        condition.setTeamName("teamB");
+//        condition.setUsername();
+
+        List<MemberTeamDto> result = memberJpaRepository.search(condition);
+//        assertThat(result).extracting("username").contains("member4");
+        for (MemberTeamDto memberTeamDto : result) {
+            System.out.println("memberTeamDto = " + memberTeamDto);
+        }
+    }
+
 }
